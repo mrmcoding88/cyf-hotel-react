@@ -1,10 +1,17 @@
+import { useState } from "react";
+
 const SearchResutl = props => {
   let totalNight;
   function calcTotalNight(entrance, exit) {
+    const t = Math.abs(entrance - exit);
     const checkinDate = Date.parse(entrance);
     const checkoutDate = Date.parse(exit);
     const totalTime = Math.abs(checkoutDate - checkinDate);
     totalNight = Math.floor(totalTime / (1000 * 60 * 60 * 24));
+  }
+  const [clickedRow, setClickedRow] = useState();
+  function handleClick(index) {
+    setClickedRow(index);
   }
   return (
     <table className="table">
@@ -25,7 +32,11 @@ const SearchResutl = props => {
         {props.results.map((fakeInfo, index) => {
           calcTotalNight(fakeInfo.checkInDate, fakeInfo.checkOutDate);
           return (
-            <tr key={index}>
+            <tr
+              key={index}
+              onClick={() => handleClick(index)}
+              className={clickedRow == index ? "highlight" : null}
+            >
               <td>{fakeInfo.id}</td>
               <td>{fakeInfo.title}</td>
               <td>{fakeInfo.firstName}</td>
